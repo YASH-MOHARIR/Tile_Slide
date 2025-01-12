@@ -937,3 +937,55 @@ body {
 .menu-container {
   transition: transform 0.5s ease, opacity 0.5s ease;
 }
+
+.name-input-container {
+  margin: 20px 0;
+  text-align: center;
+}
+
+#playerNameInput {
+  padding: 10px;
+  border: 2px solid #4caf50;
+  border-radius: 5px;
+  font-size: 16px;
+  width: 200px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+  transition: all ease 0.3s;
+  &:focus {
+    outline: none;
+    border: 2px solid #ffffff;
+  }
+}
+
+.score-entry {
+  display: grid;
+  grid-template-columns: 60px 150px 100px 100px;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  margin-bottom: 5px;
+  border-radius: 5px;
+
+  &.top-1 {
+    background: rgba(255, 215, 0, 0.2);
+  }
+
+  &.top-2 {
+    background: rgba(192, 192, 192, 0.2);
+  }
+
+  &.top-3 {
+    background: rgba(205, 127, 50, 0.2);
+  }
+
+  .player {
+    color: #4caf50;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

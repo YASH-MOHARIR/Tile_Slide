@@ -3,8 +3,9 @@ import { TileType } from "./tileTypes.js";
 import { SoundHandler, sounds } from "./soundHandler.js";
 
 // Configure background music to loop
-sounds.backgroundMusic.loop = true;
-let isMuted = localStorage.getItem("isMuted") === "true" || false;
+// sounds.backgroundMusic.loop = true;
+// let isMuted = localStorage.getItem("isMuted") === "true" || false;
+let isMuted = SoundHandler.isMuted;
 let musicInitialized = false;
 
 // Sound control functions
@@ -19,33 +20,11 @@ function handleFirstInteraction() {
   }
 }
 
-function updateSoundIcons(iconClass) {
-  document.querySelectorAll(".sound-toggle i").forEach((icon) => {
-    icon.className = `fas ${iconClass}`;
-  });
-}
-
-function toggleSound() {
-  isMuted = !isMuted;
-  localStorage.setItem("isMuted", isMuted);
-
-  if (isMuted) {
-    updateSoundIcons("fa-volume-mute");
-    sounds.backgroundMusic.pause();
-  } else {
-    updateSoundIcons("fa-volume-up");
-    if (musicInitialized) {
-      SoundHandler.playBackgroundMusic();
-    }
-  }
-}
-
 // Game state management
 let gameStarted = false;
 
 // Initialize menu system DOMContentLoaded
 document.addEventListener("DOMContentLoaded", () => {
- 
   // Initialize sound state
   SoundHandler.initializeSounds();
 
@@ -67,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".sound-toggle").forEach((button) => {
     button.onclick = (e) => {
       e.stopPropagation();
-      toggleSound();
+      SoundHandler.toggleSound();
       handleFirstInteraction(); // Ensure music can play after toggle
     };
   });
@@ -126,24 +105,18 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".pushable").forEach((button) => {
     button.addEventListener("click", SoundHandler.playButtonSound);
   });
-
-  // Start background music when game starts
-  document.getElementById("play-btn").addEventListener("click", () => {
-    SoundHandler.playBackgroundMusic();
-  });
 });
 
 function startGame() {
-
   const gameLayoutContainer = document.querySelector(".game-layout");
   const menuContainer = document.querySelector(".menu-container");
   const gameboardWrapper = document.querySelector(".gameboard-wrapper");
   const hud = document.getElementById("hud");
   // const time_move_left = document.getElementById("time_move_left");
-  
+
   // Add slide-up class to menu
   menuContainer.classList.add("slide-up");
-  
+
   gameLayoutContainer.style.display = "block";
   // After menu starts sliding up, show game elements
   setTimeout(() => {
@@ -162,79 +135,47 @@ function startGame() {
     currentLevelIndex = 0;
     totalScore = 0;
     loadLevel(currentLevelIndex);
-    SoundHandler.playBackgroundMusic();
   }, 500); // Match this with the menu transition duration
 }
 
-// function returnToMenu() {
-  
-//   const gameLayoutContainer = document.querySelector(".game-layout");
-//   gameLayoutContainer.style.display = "none";
-
-//   const menuContainer = document.querySelector(".menu-container");
-//   const gameboardWrapper = document.querySelector(".gameboard-wrapper");
-//   const hud = document.getElementById("hud");
-
-//   // Remove slide-in classes
-//   gameboardWrapper.classList.remove("slide-in");
-//   hud.classList.remove("slide-in");
-
-//   // After elements slide out, show menu
-//   setTimeout(() => {
-//     gameboardWrapper.style.display = "none";
-//     hud.style.display = "none";
-//     menuContainer.style.display = "flex";
-
-//     // Reset menu position
-//     menuContainer.classList.remove("slide-up");
-
-//     // Reset game state
-//     gameStarted = false;
-//     stopTimer();
-//     currentLevelIndex = 0;
-//     totalScore = 0;
-//   }, 500);
-// }
-
 function returnToMenu() {
-  const gameLayoutContainer = document.querySelector('.game-layout');
-  const menuContainer = document.querySelector('.menu-container');
-  const gameboardWrapper = document.querySelector('.gameboard-wrapper');
-  const hud = document.getElementById('hud');
+  const gameLayoutContainer = document.querySelector(".game-layout");
+  const menuContainer = document.querySelector(".menu-container");
+  const gameboardWrapper = document.querySelector(".gameboard-wrapper");
+  const hud = document.getElementById("hud");
 
   // First, trigger slide-out animations
-  gameboardWrapper.classList.remove('slide-in');
-  gameboardWrapper.classList.add('slide-out');
-  hud.classList.remove('slide-in');
-  hud.classList.add('slide-out');
+  gameboardWrapper.classList.remove("slide-in");
+  gameboardWrapper.classList.add("slide-out");
+  hud.classList.remove("slide-in");
+  hud.classList.add("slide-out");
 
   // Wait for animations to complete before showing menu
   setTimeout(() => {
-      // Hide game elements
-      gameLayoutContainer.style.display = 'none';
-      gameboardWrapper.style.display = 'none';
-      hud.style.display = 'none';
+    // Hide game elements
+    gameLayoutContainer.style.display = "none";
+    gameboardWrapper.style.display = "none";
+    hud.style.display = "none";
 
-      // Show and animate menu
-      menuContainer.style.display = 'flex';
-      menuContainer.classList.remove('slide-up');
-      menuContainer.classList.add('menu-slide-in');
+    // Show and animate menu
+    menuContainer.style.display = "flex";
+    menuContainer.classList.remove("slide-up");
+    menuContainer.classList.add("menu-slide-in");
 
-      // Reset game state
-      gameStarted = false;
-      stopTimer();
-      currentLevelIndex = 0;
-      totalScore = 0;
+    // Reset game state
+    gameStarted = false;
+    stopTimer();
+    currentLevelIndex = 0;
+    totalScore = 0;
 
-      // Remove animation classes after transition
-      setTimeout(() => {
-          gameboardWrapper.classList.remove('slide-out');
-          hud.classList.remove('slide-out');
-          menuContainer.classList.remove('menu-slide-in');
-      }, 500);
+    // Remove animation classes after transition
+    setTimeout(() => {
+      gameboardWrapper.classList.remove("slide-out");
+      hud.classList.remove("slide-out");
+      menuContainer.classList.remove("menu-slide-in");
+    }, 500);
   }, 500); // Match this with animation duration
 }
-
 
 ///
 function updateLeaderboard() {
@@ -252,24 +193,25 @@ function updateLeaderboard() {
     leaderboardList.innerHTML = '<p style="text-align: center">No scores yet!</p>';
     return;
   }
-
+  console.log("top scores", topScores);
   // Create leaderboard HTML
   leaderboardList.innerHTML = topScores
     .map(
       (score, index) => `
-        <div class="score-entry">
-            <span class="rank">#${index + 1}</span>
-            <span class="score">${score.score}</span>
-            <span class="level">Level ${score.levelReached}</span>
-        </div>
-    `
+              <div class="score-entry ${index < 3 ? "top-" + (index + 1) : ""}">
+                  <span class="rank">#${index + 1}</span>
+                  <span class="player">${score.playerName}</span>
+                  <span class="score">${score.score}</span>
+                  <span class="level">Level ${score.levelReached}</span>
+              </div>
+          `
     )
     .join("");
 }
 
 // Timer Variables
-let timeLeft = 1500; // Starting time for first level
-let baseTime = 1500; // Base time that increases each level
+let timeLeft = 5; // Starting time for first level
+let baseTime = 5; // Base time that increases each level
 let timeIncrement = 5; // Time increase per level
 let timer; // Timer interval
 let totalScore = 0;
@@ -332,7 +274,6 @@ function handleGameComplete() {
   const finalScore = calculateScore();
   totalScore += finalScore; // Add final level score to total
   stopTimer();
-  saveScore(totalScore, currentLevelIndex + 1);
 
   if (!isMuted) {
     SoundHandler.playBackgroundMusic();
@@ -659,19 +600,20 @@ function showLevelComplete() {
   modal.classList.add("show");
 }
 // Add score saving functionality
-function saveScore() {
-  const highScores = JSON.parse(localStorage.getItem("tileGameScores") || "[]");
-  highScores.push({
-    score: totalScore,
-    date: new Date().toISOString(),
-    levelReached: currentLevelIndex + 1,
+function saveScore(score, levelReached, playerName) {
+  // Get existing scores
+  const scores = JSON.parse(localStorage.getItem("tileGameScores") || "[]");
+
+  // Add new score
+  scores.push({
+    playerName,
+    score,
+    levelReached,
+    timestamp: new Date().toISOString(),
   });
 
-  // Sort scores and keep top 10
-  highScores.sort((a, b) => b.score - a.score);
-  highScores.splice(10); // Keep only top 10 scores
-
-  localStorage.setItem("tileGameScores", JSON.stringify(highScores));
+  // Save back to localStorage
+  localStorage.setItem("tileGameScores", JSON.stringify(scores));
 }
 
 // Update showFinalModal function
@@ -698,13 +640,25 @@ function showFinalModal(title, score, isGameOver) {
   };
 
   finalMenuBtn.onclick = () => {
+    const playerName = document.getElementById("playerNameInput").value.trim();
+    if (playerName) {
+      // Save the score with player name
+      saveScore(score, currentLevelIndex + 1, playerName);
+      returnToMenu();
+      modal.style.display = "none";
+    } else {
+      alert("Please enter your name!");
+    }
     modal.classList.remove("show");
     SoundHandler.playBackgroundMusic();
     returnToMenu();
   };
 
+  // modal.style.display = "block";
   modal.classList.add("show");
 }
+
+ 
 
 document.getElementById("next-level-btn").addEventListener("click", () => {
   const modal = document.getElementById("level-complete-modal");
@@ -747,26 +701,25 @@ function loadLevel(levelIndex) {
 //  * 12. Initialize the First Level
 loadLevel(currentLevelIndex);
 
-
 //
 
-const creditsBtn = document.getElementById('credits-btn');
-const creditsModal = document.getElementById('credits-modal');
-const closeCreditsBtn = document.getElementById('close-credits-btn');
+const creditsBtn = document.getElementById("credits-btn");
+const creditsModal = document.getElementById("credits-modal");
+const closeCreditsBtn = document.getElementById("close-credits-btn");
 
 // Open credits modal
-creditsBtn.addEventListener('click', () => {
-    creditsModal.classList.add('show');
+creditsBtn.addEventListener("click", () => {
+  creditsModal.classList.add("show");
 });
 
 // Close credits modal
-closeCreditsBtn.addEventListener('click', () => {
-    creditsModal.classList.remove('show');
+closeCreditsBtn.addEventListener("click", () => {
+  creditsModal.classList.remove("show");
 });
 
 // Close modal if clicking outside
-creditsModal.addEventListener('click', (e) => {
-    if (e.target === creditsModal) {
-        creditsModal.classList.remove('show');
-    }
+creditsModal.addEventListener("click", (e) => {
+  if (e.target === creditsModal) {
+    creditsModal.classList.remove("show");
+  }
 });
