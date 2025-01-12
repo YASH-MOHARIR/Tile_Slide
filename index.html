@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Arrow & Block Push Puzzle</title>
+
+    <link rel="icon" href="./resources/images/fav-icon.png" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Sound Toggle Button -->
+    <button id="menu-sound-toggle" class="pushable sound-toggle">
+      <span class="shadow"></span>
+      <span class="edge"></span>
+      <span class="front">
+        <i class="fas fa-volume-up"></i>
+      </span>
+    </button>
+
+    <!-- Add this right after your <body> tag, before your existing game elements -->
+    <div id="main-menu" class="menu-container">
+      <!-- <h1 class="game-title">Tile Slide</h1> -->
+      <h1 class="game-title">
+        <span>T</span>
+        <span>i</span>
+        <span>l</span>
+        <span>e</span>
+        <span>&nbsp;</span>
+        <span>S</span>
+        <span>l</span>
+        <span>i</span>
+        <span>d</span>
+        <span>e</span>
+    </h1>
+      <div class="menu-buttons">
+        <button id="play-btn" class="pushable green-btn">
+          <span class="shadow"></span>
+          <span class="edge"></span>
+          <span class="front">Play</span>
+        </button>
+
+        <button id="how-to-play-btn" class="pushable blue-btn">
+          <span class="shadow"></span>
+          <span class="edge"></span>
+          <span class="front">How to Play</span>
+        </button>
+
+        <button id="leaderboard-btn" class="pushable golden-btn">
+          <span class="shadow"></span>
+          <span class="edge"></span>
+          <span class="front">Leaderboard</span>
+        </button>
+
+        <button id="credits-btn" class="pushable purple-btn">
+          <span class="shadow"></span>
+          <span class="edge"></span>
+          <span class="front">Credits</span>
+      </button>
+      
+      </div>
+    </div>
+
+    <!-- How to Play Modal -->
+    <div id="how-to-play-modal" class="modal">
+      <div class="modal-content">
+        <h2>How to Play</h2>
+        <div class="instructions">
+          <ul class="steps">
+            <li>
+              <p>🎯 Goal: Push tiles into holes to clear the board</p>
+            </li>
+            <li>
+              <p>⌨️ Controls: Use arrow keys to push tiles</p>
+            </li>
+            <li>
+              <p>⏰ Time: Complete each level before time runs out</p>
+            </li>
+          </ul>
+
+          <p>🎮 Tips:</p>
+          <ul>
+            <li>Plan your moves carefully</li>
+            <li>Watch your remaining moves</li>
+            <li>Higher levels give more points</li>
+          </ul>
+        </div>
+        <button id="close-instructions-btn" class="pushable green-btn">
+          <span class="shadow"></span>
+          <span class="edge"></span>
+          <span class="front">Got it!</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- HUD: Displays Level, Moves Left, and Reset Button -->
+    <div class="game-layout ">
+      <!-- <h1 class="game-heading">Tile Slide</h1> -->
+
+      <div class="game-content">
+        <div id="hud">
+          <div id="game-controls">
+            
+            <div class="level-info-text" >
+              <h1 class="game-heading">Tile Slide</h1>
+
+              <span id="level-info">Level: 1</span>
+              <span id="level-title">Title</span>
+              <hr />
+              <div id="score">Score: 0</div>
+              <hr>
+            </div>
+
+            
+            <div class="game-btns">
+
+              <button id="back-to-menu-btn" class="pushable blue-btn home-btn">
+                <span class="shadow"></span>
+                <span class="edge"></span>
+                <span class="front">
+                  Menu
+                  <i class="fa-solid fa-house"></i>
+                </span>
+              </button>
+
+              <button class="pushable reset-btn" id="reset-btn">
+                <span class="shadow"></span>
+                <span class="edge"></span>
+                <span class="front">
+                  Reset Level
+                  <i class="fa-solid fa-rotate-right reset-icon"></i>
+                </span>
+              </button>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- The game board container -->
+        <div class="game-board-container">
+          <div class="game-info" id="time_move_left">
+            <div id="timer">Time: 30 s</div>
+            <span id="moves-info">Moves Left: 0</span>
+          </div>
+          <div class="gameboard-wrapper">
+            <div id="game-board"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="level-complete-modal" class="modal">
+      <div class="modal-content">
+        <h2>Level Complete! 🎉</h2>
+        <p class="stats">Total Score: <span id="total-score">0</span></p>
+        <button id="next-level-btn" class="pushable green-btn">
+          <span class="shadow"></span>
+          <span class="edge"></span>
+          <span class="front">Next Level</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Try Again Modal  -->
+    <div id="time-up-modal" class="modal">
+      <div class="modal-content">
+        <h2>Time's Up!</h2>
+        <p>Final Score: <span id="final-score">0</span></p>
+        <div class="modal-buttons">
+          <button id="try-again-btn" class="pushable">
+            <span class="shadow"></span>
+            <span class="edge"></span>
+            <span class="front">Play Again</span>
+          </button>
+          <button id="final-menu-btn" class="pushable">
+            <span class="shadow"></span>
+            <span class="edge"></span>
+            <span class="front">Menu</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leaderboard Modal -->
+    <div id="leaderboard-modal" class="modal">
+      <div class="modal-content">
+        <h2>Top Scores 🏆</h2>
+        <div id="leaderboard-list">
+          <!-- Scores will be inserted here -->
+        </div>
+        <button id="close-leaderboard-btn" class="pushable">
+          <span class="shadow"></span>
+          <span class="edge"></span>
+          <span class="front">Close</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Credits Modal -->
+<div id="credits-modal" class="modal">
+  <div class="modal-content">
+      <h2>Credits</h2>
+      <div class="credits-content">
+          <div class="creator-info">
+              <!-- <img src="path-to-your-avatar.png" alt="Creator Avatar" class="creator-avatar"> -->
+              <h3>Created by YASH MOHARIR</h3>
+              <p class="creator-title">Game Developer</p>
+          </div>
+          <div class="social-links">
+              <a href="https://github.com/yourusername" target="_blank" class="social-link">
+                  <i class="fab fa-github"></i> GitHub
+              </a>
+              <a href="https://linkedin.com/in/yourusername" target="_blank" class="social-link">
+                  <i class="fab fa-linkedin"></i> LinkedIn
+              </a>
+              <a href="https://yourportfolio.com" target="_blank" class="social-link">
+                  <i class="fas fa-globe"></i> Portfolio
+              </a>
+          </div>
+          <div class="game-info">
+              <p>© 2024 Tile Slide</p>
+              <p>Version 1.0</p>
+          </div>
+      </div>
+      <button id="close-credits-btn" class="pushable">
+          <span class="shadow"></span>
+          <span class="edge"></span>
+          <span class="front">Close</span>
+      </button>
+  </div>
+</div>
+
+
+    <!-- Script -->
+    <script type="module" src="./scripts/script.js"></script>
+  </body>
+</html>
