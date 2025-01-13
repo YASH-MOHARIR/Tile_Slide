@@ -2,9 +2,12 @@ import { levels } from "./levels.js";
 import { TileType } from "./tileTypes.js";
 import { SoundHandler, sounds } from "./soundHandler.js";
 
+import * as dynamoDB from "./dynamoDB.js";
+
 // Configure background music to loop
-sounds.backgroundMusic.loop = true;
-let isMuted = localStorage.getItem("isMuted") === "true" || false;
+// sounds.backgroundMusic.loop = true;
+// let isMuted = localStorage.getItem("isMuted") === "true" || false;
+let isMuted = SoundHandler.isMuted;
 let musicInitialized = false;
 
 // Sound control functions
@@ -19,33 +22,12 @@ function handleFirstInteraction() {
   }
 }
 
-function updateSoundIcons(iconClass) {
-  document.querySelectorAll(".sound-toggle i").forEach((icon) => {
-    icon.className = `fas ${iconClass}`;
-  });
-}
-
-function toggleSound() {
-  isMuted = !isMuted;
-  localStorage.setItem("isMuted", isMuted);
-
-  if (isMuted) {
-    updateSoundIcons("fa-volume-mute");
-    sounds.backgroundMusic.pause();
-  } else {
-    updateSoundIcons("fa-volume-up");
-    if (musicInitialized) {
-      SoundHandler.playBackgroundMusic();
-    }
-  }
-}
-
 // Game state management
 let gameStarted = false;
 
 // Initialize menu system DOMContentLoaded
 document.addEventListener("DOMContentLoaded", () => {
- 
+  // dynamoDB.getLeaderboard();
   // Initialize sound state
   SoundHandler.initializeSounds();
 
@@ -67,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".sound-toggle").forEach((button) => {
     button.onclick = (e) => {
       e.stopPropagation();
-      toggleSound();
+      SoundHandler.toggleSound();
       handleFirstInteraction(); // Ensure music can play after toggle
     };
   });
@@ -126,24 +108,18 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".pushable").forEach((button) => {
     button.addEventListener("click", SoundHandler.playButtonSound);
   });
-
-  // Start background music when game starts
-  document.getElementById("play-btn").addEventListener("click", () => {
-    SoundHandler.playBackgroundMusic();
-  });
 });
 
 function startGame() {
-
   const gameLayoutContainer = document.querySelector(".game-layout");
   const menuContainer = document.querySelector(".menu-container");
   const gameboardWrapper = document.querySelector(".gameboard-wrapper");
   const hud = document.getElementById("hud");
   // const time_move_left = document.getElementById("time_move_left");
-  
+
   // Add slide-up class to menu
   menuContainer.classList.add("slide-up");
-  
+
   gameLayoutContainer.style.display = "block";
   // After menu starts sliding up, show game elements
   setTimeout(() => {
@@ -162,114 +138,91 @@ function startGame() {
     currentLevelIndex = 0;
     totalScore = 0;
     loadLevel(currentLevelIndex);
-    SoundHandler.playBackgroundMusic();
   }, 500); // Match this with the menu transition duration
 }
 
-// function returnToMenu() {
-  
-//   const gameLayoutContainer = document.querySelector(".game-layout");
-//   gameLayoutContainer.style.display = "none";
-
-//   const menuContainer = document.querySelector(".menu-container");
-//   const gameboardWrapper = document.querySelector(".gameboard-wrapper");
-//   const hud = document.getElementById("hud");
-
-//   // Remove slide-in classes
-//   gameboardWrapper.classList.remove("slide-in");
-//   hud.classList.remove("slide-in");
-
-//   // After elements slide out, show menu
-//   setTimeout(() => {
-//     gameboardWrapper.style.display = "none";
-//     hud.style.display = "none";
-//     menuContainer.style.display = "flex";
-
-//     // Reset menu position
-//     menuContainer.classList.remove("slide-up");
-
-//     // Reset game state
-//     gameStarted = false;
-//     stopTimer();
-//     currentLevelIndex = 0;
-//     totalScore = 0;
-//   }, 500);
-// }
-
 function returnToMenu() {
-  const gameLayoutContainer = document.querySelector('.game-layout');
-  const menuContainer = document.querySelector('.menu-container');
-  const gameboardWrapper = document.querySelector('.gameboard-wrapper');
-  const hud = document.getElementById('hud');
+  const gameLayoutContainer = document.querySelector(".game-layout");
+  const menuContainer = document.querySelector(".menu-container");
+  const gameboardWrapper = document.querySelector(".gameboard-wrapper");
+  const hud = document.getElementById("hud");
 
   // First, trigger slide-out animations
-  gameboardWrapper.classList.remove('slide-in');
-  gameboardWrapper.classList.add('slide-out');
-  hud.classList.remove('slide-in');
-  hud.classList.add('slide-out');
+  gameboardWrapper.classList.remove("slide-in");
+  gameboardWrapper.classList.add("slide-out");
+  hud.classList.remove("slide-in");
+  hud.classList.add("slide-out");
 
   // Wait for animations to complete before showing menu
   setTimeout(() => {
-      // Hide game elements
-      gameLayoutContainer.style.display = 'none';
-      gameboardWrapper.style.display = 'none';
-      hud.style.display = 'none';
+    // Hide game elements
+    gameLayoutContainer.style.display = "none";
+    gameboardWrapper.style.display = "none";
+    hud.style.display = "none";
 
-      // Show and animate menu
-      menuContainer.style.display = 'flex';
-      menuContainer.classList.remove('slide-up');
-      menuContainer.classList.add('menu-slide-in');
+    // Show and animate menu
+    menuContainer.style.display = "flex";
+    menuContainer.classList.remove("slide-up");
+    menuContainer.classList.add("menu-slide-in");
 
-      // Reset game state
-      gameStarted = false;
-      stopTimer();
-      currentLevelIndex = 0;
-      totalScore = 0;
+    // Reset game state
+    gameStarted = false;
+    stopTimer();
+    currentLevelIndex = 0;
+    totalScore = 0;
 
-      // Remove animation classes after transition
-      setTimeout(() => {
-          gameboardWrapper.classList.remove('slide-out');
-          hud.classList.remove('slide-out');
-          menuContainer.classList.remove('menu-slide-in');
-      }, 500);
+    // Remove animation classes after transition
+    setTimeout(() => {
+      gameboardWrapper.classList.remove("slide-out");
+      hud.classList.remove("slide-out");
+      menuContainer.classList.remove("menu-slide-in");
+    }, 500);
   }, 500); // Match this with animation duration
 }
 
-
 ///
-function updateLeaderboard() {
+async function updateLeaderboard() {
   const leaderboardList = document.getElementById("leaderboard-list");
-  // Get scores from localStorage
-  const scores = JSON.parse(localStorage.getItem("tileGameScores") || "[]");
 
-  // Sort scores in descending order
-  scores.sort((a, b) => b.score - a.score);
-
-  // Take top 10 scores
-  const topScores = scores.slice(0, 10);
-
+  // const topScores = await dynamoDB.getLeaderboard();
+  const topScores = [
+    {
+      PlayerName: "Alice",
+      Score: 1500,
+      LevelReached: 20,
+      Timestamp: "2025-01-11T10:15:30.000Z",
+    },
+    {
+      PlayerName: "Bob",
+      Score: 1200,
+      LevelReached: 18,
+      Timestamp: "2025-01-11T10:20:45.000Z",
+    },
+  ];
+  console.log("top scores", topScores);
   if (topScores.length === 0) {
     leaderboardList.innerHTML = '<p style="text-align: center">No scores yet!</p>';
     return;
   }
-
+  console.log("top scores", topScores);
   // Create leaderboard HTML
   leaderboardList.innerHTML = topScores
     .map(
       (score, index) => `
-        <div class="score-entry">
-            <span class="rank">#${index + 1}</span>
-            <span class="score">${score.score}</span>
-            <span class="level">Level ${score.levelReached}</span>
-        </div>
-    `
+      <div class="score-entry ${index < 3 ? "top-" + (index + 1) : ""}">
+          <span class="rank">#${index + 1}</span>
+          <span class="player">${score.PlayerName}</span>
+          <span class="score">${score.Score}</span>
+          <span class="level">Level ${score.LevelReached}</span>
+      </div>
+  `
     )
     .join("");
 }
 
 // Timer Variables
-let timeLeft = 1500; // Starting time for first level
-let baseTime = 1500; // Base time that increases each level
+let timeLeft = 150; // Starting time for first level
+let baseTime = 150; // Base time that increases each level
 let timeIncrement = 5; // Time increase per level
 let timer; // Timer interval
 let totalScore = 0;
@@ -318,11 +271,7 @@ function updateScoreDisplay() {
   const scoreElement = document.getElementById("score");
   scoreElement.textContent = `Score: ${totalScore}`;
 }
-// Modify handleTimeUp function
-function handleTimeUp() {
-  stopTimer();
-  showFinalModal("Time's Up! ⏰", totalScore, true);
-}
+ 
 
 function handleGameComplete() {
   SoundHandler.stopBackgroundMusic();
@@ -332,7 +281,6 @@ function handleGameComplete() {
   const finalScore = calculateScore();
   totalScore += finalScore; // Add final level score to total
   stopTimer();
-  saveScore(totalScore, currentLevelIndex + 1);
 
   if (!isMuted) {
     SoundHandler.playBackgroundMusic();
@@ -414,8 +362,8 @@ function isArrowTile(tile) {
 }
 
 function isPushable(tile) {
-  // Arrows and blocks are "pushable"
-  return isArrowTile(tile) || tile === TileType.BLOCK;
+  // Arrows, blocks and cracked tiles are "pushable"
+  return isArrowTile(tile) || tile === TileType.BLOCK || tile === TileType.CRACKED;
 }
 
 function getDirection(arrowType) {
@@ -457,9 +405,33 @@ function renderBoard() {
       // Set initial position
       tileDiv.style.transform = `translate(${col * 80}px, ${row * 80}px)`;
 
+      // Add click listeners for arrow tiles
       if (isArrowTile(tile)) {
         tileDiv.addEventListener("click", () => onArrowClick(row, col));
       }
+
+      // Special handling for cracked tiles
+      // In your renderBoard function where you handle cracked tiles
+      if (tile === TileType.CRACKED) {
+        tileDiv.classList.add("tile", "cracked");
+        
+        // Add click listener for cracked tiles
+        tileDiv.addEventListener("click", () => {
+            // Play break sound
+            sounds.crackingTile.play();
+            
+            // Call the break animation function
+            breakCrackedTile(tileDiv);
+    
+            movesLeft--;
+            movesInfo.textContent = `Moves Left: ${movesLeft}`;
+            // Update board state after animation
+            setTimeout(() => {
+                board[row][col] = TileType.BLANK;
+                checkWinOrLose();
+            }, 600); // Match this with the animation duration
+        });
+    } 
 
       boardElement.appendChild(tileDiv);
     }
@@ -468,6 +440,62 @@ function renderBoard() {
   levelTitle.textContent = ` ${levels[currentLevelIndex].level_title}`;
   levelInfo.textContent = `Level: ${currentLevelIndex + 1}`;
   movesInfo.textContent = `Moves Left: ${movesLeft}`;
+}
+
+function breakCrackedTile(tileElement) {
+  // Add breaking class to start main animation
+  tileElement.classList.add('breaking');
+
+  // Create particles
+  const particles = [];
+  const particleCount = 8;
+
+  for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      
+      particle.style.left = `${Math.random() * 100}%`;
+      particle.style.top = `${Math.random() * 100}%`;
+      
+      const size = 5 + Math.random() * 10;
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+      
+      // Use the same background as cracked tile
+      particle.style.backgroundImage = 'url("./resources/images/cracked.png")';
+      particle.style.backgroundSize = 'cover';
+      
+      tileElement.appendChild(particle);
+      particles.push(particle);
+  }
+
+  // Animate particles
+  particles.forEach((particle) => {
+      particle.animate(
+          [
+              { 
+                  transform: 'translate(0, 0) rotate(0)',
+                  opacity: 1 
+              },
+              { 
+                  transform: `translate(${-50 + Math.random() * 100}px, 
+                                     ${-50 + Math.random() * 100}px) 
+                             rotate(${-180 + Math.random() * 360}deg)`,
+                  opacity: 0 
+              }
+          ],
+          {
+              duration: 600 + Math.random() * 300,
+              easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+              fill: 'forwards'
+          }
+      );
+  });
+
+  // Remove the tile after animation
+  setTimeout(() => {
+      tileElement.remove();
+  }, 600);
 }
 
 /*************************************************************
@@ -490,6 +518,8 @@ function onArrowClick(row, col) {
   // renderBoard() //is now called after animation in pushTiles
   checkWinOrLose();
 }
+
+ 
 
 /*************************************************************
  * 9. pushTiles
@@ -659,19 +689,10 @@ function showLevelComplete() {
   modal.classList.add("show");
 }
 // Add score saving functionality
-function saveScore() {
-  const highScores = JSON.parse(localStorage.getItem("tileGameScores") || "[]");
-  highScores.push({
-    score: totalScore,
-    date: new Date().toISOString(),
-    levelReached: currentLevelIndex + 1,
-  });
-
-  // Sort scores and keep top 10
-  highScores.sort((a, b) => b.score - a.score);
-  highScores.splice(10); // Keep only top 10 scores
-
-  localStorage.setItem("tileGameScores", JSON.stringify(highScores));
+async function saveScore(playerName, score, levelReached) {
+  console.log("Saving score:", playerName, score, levelReached);
+  // await dynamoDB.addScore(playerName, score, levelReached);
+  // await dynamoDB.addScore("YASH", 0, 1);
 }
 
 // Update showFinalModal function
@@ -698,11 +719,22 @@ function showFinalModal(title, score, isGameOver) {
   };
 
   finalMenuBtn.onclick = () => {
+    const playerName = document.getElementById("playerNameInput").value.trim();
+    if (playerName) {
+      // Save the score with player name
+
+      saveScore(playerName, score, currentLevelIndex + 1);
+      returnToMenu();
+      modal.style.display = "none";
+    } else {
+      alert("Please enter your name!");
+    }
     modal.classList.remove("show");
     SoundHandler.playBackgroundMusic();
     returnToMenu();
   };
 
+  // modal.style.display = "block";
   modal.classList.add("show");
 }
 
@@ -747,26 +779,32 @@ function loadLevel(levelIndex) {
 //  * 12. Initialize the First Level
 loadLevel(currentLevelIndex);
 
-
 //
 
-const creditsBtn = document.getElementById('credits-btn');
-const creditsModal = document.getElementById('credits-modal');
-const closeCreditsBtn = document.getElementById('close-credits-btn');
+const creditsBtn = document.getElementById("credits-btn");
+const creditsModal = document.getElementById("credits-modal");
+const closeCreditsBtn = document.getElementById("close-credits-btn");
 
 // Open credits modal
-creditsBtn.addEventListener('click', () => {
-    creditsModal.classList.add('show');
+creditsBtn.addEventListener("click", () => {
+  creditsModal.classList.add("show");
 });
 
 // Close credits modal
-closeCreditsBtn.addEventListener('click', () => {
-    creditsModal.classList.remove('show');
+closeCreditsBtn.addEventListener("click", () => {
+  creditsModal.classList.remove("show");
 });
 
 // Close modal if clicking outside
-creditsModal.addEventListener('click', (e) => {
-    if (e.target === creditsModal) {
-        creditsModal.classList.remove('show');
-    }
+creditsModal.addEventListener("click", (e) => {
+  if (e.target === creditsModal) {
+    creditsModal.classList.remove("show");
+  }
 });
+
+//
+//clicklistener for test_btn
+// document.getElementById("test_btn").addEventListener("click", () => {
+//   dynamoDB.testAddScore();
+//   // dynamoDB.testGetLeaderboard();
+// });

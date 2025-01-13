@@ -345,6 +345,8 @@ body {
 
 /* Hole Tiles */
 .hole {
+  pointer-events: none;
+  cursor: default;
   background: linear-gradient(145deg, #ffffff 0%, #fdfdfd 100%);
   box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
   opacity: 0.8;
@@ -391,10 +393,12 @@ body {
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
 }
-
 .modal.show {
   display: flex;
   animation: fadeIn 0.3s ease forwards;
+}
+.modal.show .modal-content {
+  animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 .modal-content {
@@ -406,10 +410,6 @@ body {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   transform: scale(0.7);
   opacity: 0;
-}
-
-.modal.show .modal-content {
-  animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 @keyframes fadeIn {
@@ -613,7 +613,6 @@ body {
   opacity: 0;
 }
 
-/* Add these to your style.scss */
 /* Menu transition animations */
 .menu-container {
   transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
@@ -768,4 +767,72 @@ body {
 #hud,
 .menu-container {
   transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.name-input-container {
+  margin: 20px 0;
+  text-align: center;
+}
+
+#playerNameInput {
+  padding: 10px;
+  border: 2px solid #4caf50;
+  border-radius: 5px;
+  font-size: 16px;
+  width: 200px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+  transition: all ease 0.3s;
+}
+#playerNameInput:focus {
+  outline: none;
+  border: 2px solid #ffffff;
+}
+
+.score-entry {
+  display: grid;
+  grid-template-columns: 60px 150px 100px 100px;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+.score-entry.top-1 {
+  background: rgba(255, 215, 0, 0.2) !important;
+}
+.score-entry.top-2 {
+  background: rgba(192, 192, 192, 0.2) !important;
+}
+.score-entry.top-3 {
+  background: rgba(205, 127, 50, 0.2) !important;
+}
+.score-entry .player {
+  color: #4caf50;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tile.cracked {
+  background-color: rgba(139, 139, 139, 0.2745098039);
+  background-image: url("./resources/images/cracked.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 120px;
+}
+.tile.cracked.breaking {
+  animation: shatterTile 0.6s ease-in forwards;
+}
+
+.particle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: rgba(139, 139, 139, 0.2745098039);
+  border-radius: 2px;
+  pointer-events: none;
 }/*# sourceMappingURL=style.css.map */

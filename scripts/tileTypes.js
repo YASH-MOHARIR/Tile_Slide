@@ -5,5 +5,6 @@ export const TileType = {
     ARROW_LEFT: "arrow_left",
     ARROW_RIGHT: "arrow_right",
     BLOCK: "block",
+    CRACKED: "cracked",
     HOLE: "hole",
   };

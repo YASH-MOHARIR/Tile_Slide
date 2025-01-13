@@ -33,7 +33,7 @@
         <span>i</span>
         <span>d</span>
         <span>e</span>
-    </h1>
+      </h1>
       <div class="menu-buttons">
         <button id="play-btn" class="pushable green-btn">
           <span class="shadow"></span>
@@ -57,8 +57,7 @@
           <span class="shadow"></span>
           <span class="edge"></span>
           <span class="front">Credits</span>
-      </button>
-      
+        </button>
       </div>
     </div>
 
@@ -95,26 +94,23 @@
     </div>
 
     <!-- HUD: Displays Level, Moves Left, and Reset Button -->
-    <div class="game-layout ">
+    <div class="game-layout">
       <!-- <h1 class="game-heading">Tile Slide</h1> -->
 
       <div class="game-content">
         <div id="hud">
           <div id="game-controls">
-            
-            <div class="level-info-text" >
+            <div class="level-info-text">
               <h1 class="game-heading">Tile Slide</h1>
 
               <span id="level-info">Level: 1</span>
               <span id="level-title">Title</span>
               <hr />
               <div id="score">Score: 0</div>
-              <hr>
+              <hr />
             </div>
 
-            
             <div class="game-btns">
-
               <button id="back-to-menu-btn" class="pushable blue-btn home-btn">
                 <span class="shadow"></span>
                 <span class="edge"></span>
@@ -132,7 +128,6 @@
                   <i class="fa-solid fa-rotate-right reset-icon"></i>
                 </span>
               </button>
-
             </div>
           </div>
         </div>
@@ -167,12 +162,16 @@
       <div class="modal-content">
         <h2>Time's Up!</h2>
         <p>Final Score: <span id="final-score">0</span></p>
+        <div class="name-input-container">
+          <input type="text" id="playerNameInput" placeholder="Enter your name" maxlength="20" required />
+        </div>
         <div class="modal-buttons">
           <button id="try-again-btn" class="pushable">
             <span class="shadow"></span>
             <span class="edge"></span>
             <span class="front">Play Again</span>
           </button>
+
           <button id="final-menu-btn" class="pushable">
             <span class="shadow"></span>
             <span class="edge"></span>
@@ -198,39 +197,38 @@
     </div>
 
     <!-- Credits Modal -->
-<div id="credits-modal" class="modal">
-  <div class="modal-content">
-      <h2>Credits</h2>
-      <div class="credits-content">
+    <div id="credits-modal" class="modal">
+      <div class="modal-content">
+        <h2>Credits</h2>
+        <div class="credits-content">
           <div class="creator-info">
-              <!-- <img src="path-to-your-avatar.png" alt="Creator Avatar" class="creator-avatar"> -->
-              <h3>Created by YASH MOHARIR</h3>
-              <p class="creator-title">Game Developer</p>
+            <!-- <img src="path-to-your-avatar.png" alt="Creator Avatar" class="creator-avatar"> -->
+            <h3>Created by YASH MOHARIR</h3>
+            <p class="creator-title">Game Developer</p>
           </div>
           <div class="social-links">
-              <a href="https://github.com/yourusername" target="_blank" class="social-link">
-                  <i class="fab fa-github"></i> GitHub
-              </a>
-              <a href="https://linkedin.com/in/yourusername" target="_blank" class="social-link">
-                  <i class="fab fa-linkedin"></i> LinkedIn
-              </a>
-              <a href="https://yourportfolio.com" target="_blank" class="social-link">
-                  <i class="fas fa-globe"></i> Portfolio
-              </a>
+            <a href="https://github.com/yourusername" target="_blank" class="social-link">
+              <i class="fab fa-github"></i> GitHub
+            </a>
+            <a href="https://linkedin.com/in/yourusername" target="_blank" class="social-link">
+              <i class="fab fa-linkedin"></i> LinkedIn
+            </a>
+            <a href="https://yourportfolio.com" target="_blank" class="social-link">
+              <i class="fas fa-globe"></i> Portfolio
+            </a>
           </div>
           <div class="game-info">
-              <p>© 2024 Tile Slide</p>
-              <p>Version 1.0</p>
+            <p>© 2024 Tile Slide</p>
+            <p>Version 1.0</p>
           </div>
-      </div>
-      <button id="close-credits-btn" class="pushable">
+        </div>
+        <button id="close-credits-btn" class="pushable">
           <span class="shadow"></span>
           <span class="edge"></span>
           <span class="front">Close</span>
-      </button>
-  </div>
-</div>
-
+        </button>
+      </div>
+    </div>
 
     <!-- Script -->
     <script type="module" src="./scripts/script.js"></script>
