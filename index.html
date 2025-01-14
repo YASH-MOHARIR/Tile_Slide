@@ -19,9 +19,7 @@
       </span>
     </button>
 
-    <!-- Add this right after your <body> tag, before your existing game elements -->
     <div id="main-menu" class="menu-container">
-      <!-- <h1 class="game-title">Tile Slide</h1> -->
       <h1 class="game-title">
         <span>T</span>
         <span>i</span>
@@ -33,7 +31,7 @@
         <span>i</span>
         <span>d</span>
         <span>e</span>
-    </h1>
+      </h1>
       <div class="menu-buttons">
         <button id="play-btn" class="pushable green-btn">
           <span class="shadow"></span>
@@ -57,8 +55,7 @@
           <span class="shadow"></span>
           <span class="edge"></span>
           <span class="front">Credits</span>
-      </button>
-      
+        </button>
       </div>
     </div>
 
@@ -72,11 +69,18 @@
               <p>🎯 Goal: Push tiles into holes to clear the board</p>
             </li>
             <li>
-              <p>⌨️ Controls: Use arrow keys to push tiles</p>
+              <p>⌨️ Controls: Clock on arrow tiles to push tiles </p>
             </li>
             <li>
               <p>⏰ Time: Complete each level before time runs out</p>
             </li>
+          </ul>
+
+          <p>Speacial Tiles :</p>
+          <ul >
+            <li>Blocks: Normal tiles that can be pushed around by arrow tiles.</li>
+            <li>Broken Tile : can be pushed around like block tiles. Click on them to break them (consumes 1 move) </li>
+            <li>Wall Tile : Walls which cannot be moved or borken</li>
           </ul>
 
           <p>🎮 Tips:</p>
@@ -95,26 +99,23 @@
     </div>
 
     <!-- HUD: Displays Level, Moves Left, and Reset Button -->
-    <div class="game-layout ">
-      <!-- <h1 class="game-heading">Tile Slide</h1> -->
-
+    <div class="game-layout">
       <div class="game-content">
         <div id="hud">
           <div id="game-controls">
-            
-            <div class="level-info-text" >
+            <div class="level-info-text">
               <h1 class="game-heading">Tile Slide</h1>
 
               <span id="level-info">Level: 1</span>
-              <span id="level-title">Title</span>
+              <div class="level-title-wrapper" style="overflow: non">
+                <span id="level-title">Title</span>
+              </div>
               <hr />
               <div id="score">Score: 0</div>
-              <hr>
+              <hr />
             </div>
 
-            
             <div class="game-btns">
-
               <button id="back-to-menu-btn" class="pushable blue-btn home-btn">
                 <span class="shadow"></span>
                 <span class="edge"></span>
@@ -132,7 +133,6 @@
                   <i class="fa-solid fa-rotate-right reset-icon"></i>
                 </span>
               </button>
-
             </div>
           </div>
         </div>
@@ -167,13 +167,17 @@
       <div class="modal-content">
         <h2>Time's Up!</h2>
         <p>Final Score: <span id="final-score">0</span></p>
+        <div class="name-input-container">
+          <input type="text" id="playerNameInput" placeholder="Enter your name" maxlength="20" required />
+        </div>
         <div class="modal-buttons">
           <button id="try-again-btn" class="pushable">
             <span class="shadow"></span>
             <span class="edge"></span>
             <span class="front">Play Again</span>
           </button>
-          <button id="final-menu-btn" class="pushable">
+
+          <button id="final-menu-btn" class="pushable blue-btn" style="margin-left: 20px;">
             <span class="shadow"></span>
             <span class="edge"></span>
             <span class="front">Menu</span>
@@ -187,6 +191,7 @@
       <div class="modal-content">
         <h2>Top Scores 🏆</h2>
         <div id="leaderboard-list">
+          <p id="loading">Loading..</p>
           <!-- Scores will be inserted here -->
         </div>
         <button id="close-leaderboard-btn" class="pushable">
@@ -197,40 +202,84 @@
       </div>
     </div>
 
-    <!-- Credits Modal -->
-<div id="credits-modal" class="modal">
-  <div class="modal-content">
-      <h2>Credits</h2>
-      <div class="credits-content">
-          <div class="creator-info">
-              <!-- <img src="path-to-your-avatar.png" alt="Creator Avatar" class="creator-avatar"> -->
-              <h3>Created by YASH MOHARIR</h3>
-              <p class="creator-title">Game Developer</p>
-          </div>
-          <div class="social-links">
-              <a href="https://github.com/yourusername" target="_blank" class="social-link">
-                  <i class="fab fa-github"></i> GitHub
-              </a>
-              <a href="https://linkedin.com/in/yourusername" target="_blank" class="social-link">
-                  <i class="fab fa-linkedin"></i> LinkedIn
-              </a>
-              <a href="https://yourportfolio.com" target="_blank" class="social-link">
-                  <i class="fas fa-globe"></i> Portfolio
-              </a>
-          </div>
-          <div class="game-info">
-              <p>© 2024 Tile Slide</p>
-              <p>Version 1.0</p>
-          </div>
-      </div>
-      <button id="close-credits-btn" class="pushable">
+   
+    <div id="credits-modal" class="modal credits-modal">
+      <div class="modal-content">
+        <h1>Credits</h1>
+
+        <div class="name">
+          <p>Created By:</p>
+          <p>Yash Moharir</p>
+        </div>
+
+        <div class="name">
+          <p>UI Designed By:</p>
+          <p>Yash Moharir</p>
+        </div>
+
+        <div class="name">
+          <p>Levels Designed By:</p>
+          <p>Yash Moharir</p>
+        </div>
+
+        <div class="name">
+          <p>Game Designed By:</p>
+          <p>I think you already know where this is going .. :)</p>
+        </div>
+
+        <div class="name">
+          <p>Sounds/SFX:</p>
+          <p>Pixabay</p>
+        </div>
+
+        <hr />
+
+        <div class="social-links">
+          <p>Connect with me :</p>
+          <a href="https://yashmoharir.com/" target="_blank" rel="noopener" class="social-link">
+            <button id="close-credits-btn" class="pushable golden-btn">
+              <span class="shadow"></span>
+              <span class="edge"></span>
+              <span class="front">
+                <i class="fas fa-globe" style="margin-right: 5px"></i>
+                <span> My Portfolio</span>
+              </span>
+            </button>
+
+            <a href="https://www.linkedin.com/in/yash-moharir/" target="_blank" rel="noopener" class="social-link">
+              <button id="close-credits-btn" class="pushable blue-btn">
+                <span class="shadow"></span>
+                <span class="edge"></span>
+                <span class="front">
+                  <i class="fab fa-linkedin"></i>
+                </span>
+              </button>
+            </a>
+
+            <a href="https://github.com/YASH-MOHARIR" target="_blank" rel="noopener" class="social-link">
+              <button id="close-credits-btn" class="pushable green-btn">
+                <span class="shadow"></span>
+                <span class="edge"></span>
+                <span class="front">
+                  <i class="fab fa-github"></i>
+                </span>
+              </button>
+            </a>
+          </a>
+        </div>
+        <hr />
+        <div class="game-info">
+          <p class="copyright">© 2024 Tile Slide. All rights reserved.</p>
+          <p class="version">Version 1.0.0</p>
+        </div>
+
+        <button id="close-credits-btn" class="pushable">
           <span class="shadow"></span>
           <span class="edge"></span>
-          <span class="front">Close</span>
-      </button>
-  </div>
-</div>
-
+          <span class="front">Sweet !!</span>
+        </button>
+      </div>
+    </div>
 
     <!-- Script -->
     <script type="module" src="./scripts/script.js"></script>
