@@ -405,7 +405,7 @@ body {
   z-index: 1000;
 }
 .modal.show {
-  display: flex;
+  display: flex !important;
   animation: fadeIn 0.3s ease forwards;
 }
 .modal.show .modal-content {

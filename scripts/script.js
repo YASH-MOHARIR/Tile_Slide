@@ -144,7 +144,11 @@ function startGame() {
 }
 
 function returnToMenu() {
-  backgroundImage.createAnimatedBackground();
+
+  menuBackground.createAnimatedBackground();
+  isTimerRunning=false;
+  gameStarted = false;
+
   const gameLayoutContainer = document.querySelector(".game-layout");
   const menuContainer = document.querySelector(".menu-container");
   const gameboardWrapper = document.querySelector(".gameboard-wrapper");
@@ -238,6 +242,7 @@ function startTimer() {
     updateTimerDisplay();
 
     if (timeLeft <= 0) {
+      console.log("time's up");
       stopTimer();
       showFinalModal("Time's Up! ⏰", totalScore, true);
     }
@@ -707,7 +712,6 @@ async function saveScore(playerName, score, levelReached) {
 function showFinalModal(title, score, isGameOver) {
   gameStarted = false;
   stopTimer();
-
   const modal = document.getElementById("time-up-modal");
   const modalTitle = modal.querySelector("h2");
   const finalScoreSpan = document.getElementById("final-score");
@@ -732,11 +736,13 @@ function showFinalModal(title, score, isGameOver) {
   finalMenuBtn.onclick = () => {
     const playNameInput =document.getElementById("playerNameInput");
     const playerName = playNameInput.value.trim();
+
     if (playerName) {
       // Save the score with player name
 
       saveScore(playerName, score, currentLevelIndex + 1);
       returnToMenu();
+
       modal.style.display = "none";
       modal.classList.remove("show");
       SoundHandler.playBackgroundMusic();
@@ -744,6 +750,7 @@ function showFinalModal(title, score, isGameOver) {
       playNameInput.style.border = "1px solid red";
       playNameInput.placeholder = "Please enter your name!";
     }
+
   };
 
   // modal.style.display = "block";
