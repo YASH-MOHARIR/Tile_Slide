@@ -5,7 +5,6 @@ body {
   margin: 0;
   padding: 0px 20px;
   background: #f0f0f0;
-  overflow-y: hidden;
   overflow-x: hidden;
 }
 
@@ -21,6 +20,8 @@ body {
   top: 35px;
   right: 25px;
   transform: scale(1.4);
+  opacity: 0.2;
+  transition: all 0.3s ease;
 }
 #menu-sound-toggle .front {
   background: #2dd4bf;
@@ -36,6 +37,9 @@ body {
 #menu-sound-toggle:hover .front {
   background: #14b8a6;
   transform: translateY(-6px);
+}
+#menu-sound-toggle:hover {
+  opacity: 1;
 }
 
 .pushable {

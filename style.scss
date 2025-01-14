@@ -5,9 +5,9 @@ body {
   margin: 0;
   padding: 0px 20px;
   background: #f0f0f0;
-  overflow-y: hidden;
+  // overflow-y: hidden;
   overflow-x: hidden;
-}
+} 
 
 .game-title {
   text-align: center;
@@ -22,6 +22,8 @@ body {
   top: 35px;
   right: 25px;
   transform: scale(1.4);
+  opacity: 0.2;
+  transition: all 0.3s ease;
 
   .front {
     background: #2dd4bf; // Teal-400
@@ -40,6 +42,9 @@ body {
   &:hover .front {
     background: #14b8a6; // Teal-500
     transform: translateY(-6px);
+  }
+  &:hover{
+    opacity: 1;
   }
 }
 

@@ -1,9 +1,13 @@
 import { levels } from "./levels.js";
 import { TileType } from "./tileTypes.js";
 import { SoundHandler, sounds } from "./soundHandler.js";
-import * as menuBackground from "./menuBackground.js"; 
+import * as menuBackground from "./menuBackground.js";
 import * as dynamoDB from "./dynamoDB.js";
 
+
+
+
+let isBreakingTile = false;
 
 let isMuted = SoundHandler.isMuted;
 let musicInitialized = false;
@@ -28,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
   menuBackground.createAnimatedBackground();
   dynamoDB.getLeaderboard();
   // Initialize sound state
-isTimerRunning=false;
+  isTimerRunning = false;
   SoundHandler.initializeSounds();
 
   // Add first interaction handler to the document
@@ -144,9 +148,8 @@ function startGame() {
 }
 
 function returnToMenu() {
-
   menuBackground.createAnimatedBackground();
-  isTimerRunning=false;
+  isTimerRunning = false;
   gameStarted = false;
 
   const gameLayoutContainer = document.querySelector(".game-layout");
@@ -192,7 +195,7 @@ async function updateLeaderboard() {
   const leaderboardList = document.getElementById("leaderboard-list");
 
   const topScores = await dynamoDB.getLeaderboard();
- 
+
   console.log("top scores", topScores);
   if (topScores.length === 0) {
     leaderboardList.innerHTML = '<p style="text-align: center">No scores yet!</p>';
@@ -216,7 +219,7 @@ async function updateLeaderboard() {
 
 // Timer Variables
 let timeLeft = 10; // Starting time for first level
-let baseTime = 20; // Base time that increases each level
+let baseTime = 200; // Base time that increases each level
 let timeIncrement = 5; // Time increase per level
 let timer; // Timer interval
 let totalScore = 0;
@@ -227,7 +230,7 @@ function startTimer() {
 
   isTimerRunning = true;
   console.log("time, current lev index and basetime", timeLeft, currentLevelIndex, baseTime);
-  timeLeft = baseTime + (currentLevelIndex * timeIncrement);
+  timeLeft = baseTime + currentLevelIndex * timeIncrement;
   console.log("time, current lev index and basetime2---", timeLeft, currentLevelIndex, baseTime);
   // timeLeft = baseTime;
   updateTimerDisplay();
@@ -269,7 +272,6 @@ function updateScoreDisplay() {
   const scoreElement = document.getElementById("score");
   scoreElement.textContent = `Score: ${totalScore}`;
 }
- 
 
 function handleGameComplete() {
   SoundHandler.stopBackgroundMusic();
@@ -412,105 +414,105 @@ function renderBoard() {
       // In your renderBoard function where you handle cracked tiles
       if (tile === TileType.CRACKED) {
         tileDiv.classList.add("tile", "cracked");
-        
-        // Add click listener for cracked tiles
+
         tileDiv.addEventListener("click", () => {
-            // Play break sound
-            sounds.crackingTile.play();
-            
-            // Call the break animation function
-            breakCrackedTile(tileDiv);
-    
-            movesLeft--;
-            movesInfo.textContent = `Moves Left: ${movesLeft}`;
-            // Update board state after animation
-            setTimeout(() => {
-                board[row][col] = TileType.BLANK;
-                checkWinOrLose();
-            }, 600); // Match this with the animation duration
+          if (isBreakingTile) return; // Prevent multiple breaks at once
+
+          isBreakingTile = true; // Set the flag
+          sounds.crackingTile.play();
+
+          breakCrackedTile(tileDiv);
+
+          movesLeft--;
+          movesInfo.textContent = `Moves Left: ${movesLeft}`;
+
+          // Update board state after animation
+          setTimeout(() => {
+            board[row][col] = TileType.BLANK;
+            isBreakingTile = false; // Reset the flag
+            checkWinOrLose();
+          }, 600);
         });
-    } 
+      }
 
       boardElement.appendChild(tileDiv);
     }
   }
 
-  if (levels[currentLevelIndex].level_title !== levelTitle.textContent.trim() ) {
-    updateLevelTitle(` ${levels[currentLevelIndex].level_title}`,currentLevelIndex + 1);
+  if (levels[currentLevelIndex].level_title !== levelTitle.textContent.trim()) {
+    updateLevelTitle(` ${levels[currentLevelIndex].level_title}`, currentLevelIndex + 1);
   }
   movesInfo.textContent = `Moves Left: ${movesLeft}`;
 }
 
-function updateLevelTitle(newTitle ,levelIndex) {
-  levelTitle.style.opacity = '0';
-  levelTitle.style.transform = 'translateY(-100px)';
-  levelInfo.style.opacity = '0';
+function updateLevelTitle(newTitle, levelIndex) {
+  levelTitle.style.opacity = "0";
+  levelTitle.style.transform = "translateY(-100px)";
+  levelInfo.style.opacity = "0";
   setTimeout(() => {
     levelInfo.textContent = `Level: ${levelIndex}`;
-    levelInfo.style.opacity = '1';
+    levelInfo.style.opacity = "1";
 
-      levelTitle.textContent = newTitle;
-      levelTitle.style.opacity = '1';
-      levelTitle.style.transform = 'translateY(0)';
+    levelTitle.textContent = newTitle;
+    levelTitle.style.opacity = "1";
+    levelTitle.style.transform = "translateY(0)";
   }, 300);
 }
 
- 
-
 function breakCrackedTile(tileElement) {
   // Add breaking class to start main animation
-  tileElement.classList.add('breaking');
+  tileElement.classList.add("breaking");
 
   // Create particles
   const particles = [];
   const particleCount = 8;
 
   for (let i = 0; i < particleCount; i++) {
-      const particle = document.createElement('div');
-      particle.className = 'particle';
-      
-      particle.style.left = `${Math.random() * 100}%`;
-      particle.style.top = `${Math.random() * 100}%`;
-      
-      const size = 5 + Math.random() * 10;
-      particle.style.width = `${size}px`;
-      particle.style.height = `${size}px`;
-      
-      // Use the same background as cracked tile
-      particle.style.backgroundImage = 'url("./resources/images/cracked.png")';
-      particle.style.backgroundSize = 'cover';
-      
-      tileElement.appendChild(particle);
-      particles.push(particle);
+    const particle = document.createElement("div");
+    particle.className = "particle";
+
+    particle.style.left = `${Math.random() * 100}%`;
+    particle.style.top = `${Math.random() * 100}%`;
+
+    const size = 5 + Math.random() * 10;
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+
+    // Use the same background as cracked tile
+    particle.style.backgroundImage = 'url("./resources/images/cracked.png")';
+    particle.style.backgroundSize = "cover";
+
+    tileElement.appendChild(particle);
+    particles.push(particle);
   }
 
   // Animate particles
   particles.forEach((particle) => {
-      particle.animate(
-          [
-              { 
-                  transform: 'translate(0, 0) rotate(0)',
-                  opacity: 1 
-              },
-              { 
-                  transform: `translate(${-50 + Math.random() * 100}px, 
+    particle.animate(
+      [
+        {
+          transform: "translate(0, 0) rotate(0)",
+          opacity: 1,
+        },
+        {
+          transform: `translate(${-50 + Math.random() * 100}px, 
                                      ${-50 + Math.random() * 100}px) 
                              rotate(${-180 + Math.random() * 360}deg)`,
-                  opacity: 0 
-              }
-          ],
-          {
-              duration: 600 + Math.random() * 300,
-              easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
-              fill: 'forwards'
-          }
-      );
+          opacity: 0,
+        },
+      ],
+      {
+        duration: 300 + Math.random() * 300,
+        easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+        fill: "forwards",
+      }
+    );
   });
 
   // Remove the tile after animation
   setTimeout(() => {
-      tileElement.remove();
-  }, 600);
+    tileElement.remove();
+  }, 300);
 }
 
 /*************************************************************
@@ -518,6 +520,9 @@ function breakCrackedTile(tileElement) {
  *    Decrement moves if the push is valid.
  *************************************************************/
 function onArrowClick(row, col) {
+  // If a tile is being broken, don't allow pushing
+  if (isBreakingTile) return;
+
   const arrowType = board[row][col];
   if (!isArrowTile(arrowType)) return;
 
@@ -533,8 +538,6 @@ function onArrowClick(row, col) {
   // renderBoard() //is now called after animation in pushTiles
   checkWinOrLose();
 }
-
- 
 
 /*************************************************************
  * 9. pushTiles
@@ -704,7 +707,7 @@ function showLevelComplete() {
   modal.classList.add("show");
 }
 // Add score saving functionality
-async function saveScore(playerName, score, levelReached) { 
+async function saveScore(playerName, score, levelReached) {
   await dynamoDB.addScore(playerName, score, levelReached);
 }
 
@@ -727,14 +730,13 @@ function showFinalModal(title, score, isGameOver) {
   tryAgainBtn.onclick = () => {
     modal.classList.remove("show");
     SoundHandler.playBackgroundMusic();
-    
+
     // Reload the current level while keeping the total score
     loadLevel(currentLevelIndex);
-};
-
+  };
 
   finalMenuBtn.onclick = () => {
-    const playNameInput =document.getElementById("playerNameInput");
+    const playNameInput = document.getElementById("playerNameInput");
     const playerName = playNameInput.value.trim();
 
     if (playerName) {
@@ -750,7 +752,6 @@ function showFinalModal(title, score, isGameOver) {
       playNameInput.style.border = "1px solid red";
       playNameInput.placeholder = "Please enter your name!";
     }
-
   };
 
   // modal.style.display = "block";
@@ -789,8 +790,8 @@ function loadLevel(levelIndex) {
   movesLeft = maxMoves;
 
   // Calculate the correct time for this level
-  timeLeft = baseTime + (levelIndex * timeIncrement);
-  gameStarted =true;
+  timeLeft = baseTime + levelIndex * timeIncrement;
+  gameStarted = true;
   renderBoard();
   startTimer();
 }
@@ -813,6 +814,5 @@ closeCreditsBtn.addEventListener("click", () => {
 
 // Close modal if clicking outside
 creditsModal.addEventListener("click", (e) => {
-    creditsModal.classList.remove("show");
+  creditsModal.classList.remove("show");
 });
- 
