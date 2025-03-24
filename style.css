@@ -5,6 +5,7 @@ body {
   margin: 0;
   padding: 0px 20px;
   background: #f0f0f0;
+  overflow-y: hidden;
   overflow-x: hidden;
 }
 
@@ -20,7 +21,6 @@ body {
   top: 35px;
   right: 25px;
   transform: scale(1.4);
-  opacity: 0.2;
   transition: all 0.3s ease;
 }
 #menu-sound-toggle .front {
@@ -226,10 +226,6 @@ body {
   width: 100%;
   margin-top: 20px;
 }
-#hud #game-controls .game-btns .home-btn,
-#hud #game-controls .game-btns .reset-btn {
-  width: 45%;
-}
 #hud #game-controls .pushable .front {
   padding: 8px 16px;
   font-size: 1.5rem;
@@ -413,6 +409,7 @@ body {
   animation: fadeIn 0.3s ease forwards;
 }
 .modal.show .modal-content {
+  width: auto;
   animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   background: linear-gradient(145deg, #ffffff 0%, #f0f0f0 100%);
   padding: 30px;
@@ -435,17 +432,11 @@ body {
 .credits-modal .modal-content .social-links {
   display: flex;
   gap: 10px;
-}
-.credits-modal .modal-content .social-links a {
-  color: #000;
-  font-size: 1.5em;
-  transition: all 0.3s ease;
-}
-.credits-modal .modal-content .social-links a:hover {
-  color: #2ecc71;
+  text-align: start;
 }
 
-.copyright, .version {
+.copyright,
+.version {
   text-align: center;
   margin-top: 20px;
   font-size: 0.5em;

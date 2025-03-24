@@ -8,7 +8,7 @@ import { TileType } from "./tileTypes.js";
 export const levels = [
   {
     // Level 0
-    level_title: "Slide and Push",
+    level_title: "Push and Slide",
     board: [
       [TileType.ARROW_RIGHT, TileType.BLANK, TileType.BLOCK, TileType.BLANK, TileType.BLANK, TileType.HOLE],
       [TileType.BLANK, TileType.BLANK, TileType.BLANK, TileType.BLANK, TileType.BLANK, TileType.BLANK],

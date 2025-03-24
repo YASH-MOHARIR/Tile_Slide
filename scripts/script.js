@@ -219,7 +219,7 @@ async function updateLeaderboard() {
 
 // Timer Variables
 let timeLeft = 10; // Starting time for first level
-let baseTime = 200; // Base time that increases each level
+let baseTime = 20; // Base time that increases each level
 let timeIncrement = 5; // Time increase per level
 let timer; // Timer interval
 let totalScore = 0;

@@ -1,0 +1,162 @@
+@media (min-width: 769px) and (max-width: 992px) {
+  .sound-toggle {
+    top: 3%;
+    right: 5%;
+    transform: scale(2);
+    opacity: 1;
+  }
+  .menu-container {
+    height: 100vh;
+    margin-top: 0;
+  }
+  .menu-container .game-title {
+    font-size: 8rem;
+  }
+  .menu-container .menu-buttons {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    margin-top: 30px;
+  }
+  .menu-container .menu-buttons .pushable span {
+    border-radius: 30px;
+  }
+  .menu-container .menu-buttons .pushable .front {
+    padding: 16px 32px;
+    font-size: 4.5rem !important;
+  }
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    font-size: large;
+  }
+  .modal.show {
+    display: flex !important;
+    animation: fadeIn 0.3s ease forwards;
+  }
+  .modal.show .modal-content {
+    margin: auto 10vw !important;
+    width: 100%;
+    font-size: 2em;
+  }
+  .modal.show .modal-content .pushable span {
+    border-radius: 30px;
+  }
+  .modal.show .modal-content .pushable .front {
+    padding: 16px 32px;
+    font-size: 2em !important;
+  }
+  .credits-modal .modal-content {
+    width: 100%;
+  }
+  .credits-modal .modal-content .name {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: start;
+  }
+  .credits-modal .modal-content .name p {
+    width: 50%;
+  }
+  .credits-modal .modal-content .social-links {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    text-align: start;
+  }
+  .credits-modal .modal-content .social-links .social-link .pushable span {
+    border-radius: 10px;
+  }
+  .credits-modal .modal-content .social-links .social-link .pushable .front {
+    padding: 16px 32px;
+    font-size: 0.5em !important;
+  }
+  #time-up-modal .modal-content {
+    font-size: 3.5em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    min-height: 80%;
+  }
+  #time-up-modal .modal-content h2 {
+    font-size: 3em;
+  }
+  #time-up-modal .modal-content .name-input-container {
+    width: 100%;
+  }
+  #time-up-modal .modal-content .name-input-container input {
+    width: 100%;
+    font-size: 1em;
+    text-align: center;
+  }
+  #time-up-modal .modal-content .modal-buttons {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: space-between;
+  }
+  #time-up-modal .modal-content .modal-buttons #final-menu-btn {
+    margin-left: 0;
+    margin-top: 20px;
+  }
+  #time-up-modal .modal-content .modal-buttons .pushable {
+    margin: 0;
+    margin-top: 5px;
+  }
+  #time-up-modal .modal-content .modal-buttons .pushable span {
+    border-radius: 30px;
+  }
+  #time-up-modal .modal-content .modal-buttons .pushable .front {
+    padding: 16px 32px;
+    font-size: 1em !important;
+  }
+  .game-layout {
+    display: flex;
+    flex-direction: column-reverse;
+    margin: auto;
+  }
+  .game-layout .game-content {
+    margin-top: 10vh;
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .game-layout .game-content #hud {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-top: 5vh;
+  }
+  .game-layout .game-content #hud #game-controls {
+    font-size: 0.5em;
+    border-radius: 5px solid black;
+  }
+  .game-layout .game-content #hud #game-controls .level-info-text {
+    font-size: 2em;
+  }
+  .game-layout .game-content #hud #game-controls .game-btns {
+    display: flex;
+  }
+  .game-layout .game-content #hud #game-controls .game-btns .pushable span {
+    border-radius: 30px;
+  }
+  .game-layout .game-content #hud #game-controls .game-btns .pushable .front {
+    padding: 16px 32px;
+    font-size: 4rem !important;
+  }
+  .game-layout .game-content .game-board-container {
+    margin: 5vh;
+    transform: scale(1.5);
+  }
+  .game-layout .game-content .game-board-container .gameboard-wrapper #game-board {
+    height: 100% !important;
+    width: 100% !important;
+  }
+}/*# sourceMappingURL=responsive.css.map */

@@ -5,9 +5,9 @@ body {
   margin: 0;
   padding: 0px 20px;
   background: #f0f0f0;
-  // overflow-y: hidden;
+  overflow-y: hidden;
   overflow-x: hidden;
-} 
+}
 
 .game-title {
   text-align: center;
@@ -22,7 +22,6 @@ body {
   top: 35px;
   right: 25px;
   transform: scale(1.4);
-  opacity: 0.2;
   transition: all 0.3s ease;
 
   .front {
@@ -43,7 +42,7 @@ body {
     background: #14b8a6; // Teal-500
     transform: translateY(-6px);
   }
-  &:hover{
+  &:hover {
     opacity: 1;
   }
 }
@@ -199,9 +198,7 @@ body {
   }
 }
 
-// Add to your existing SCSS
 .game-layout {
-  // display: flex;
 
   .game-heading {
     text-align: start;
@@ -215,7 +212,6 @@ body {
     // justify-content: space-between;
     .game-board-container {
       margin-left: 10vw;
-      
     }
   }
 }
@@ -237,7 +233,7 @@ body {
     flex-direction: column;
     #level-info {
       color: #00a0f0;
-      
+
       transition: opacity 0.3s ease, transform 0.3s ease;
     }
     .level-title-wrapper {
@@ -275,10 +271,8 @@ body {
       justify-content: space-between;
       width: 100%;
       margin-top: 20px;
-      .home-btn,
-      .reset-btn {
-        width: 45%;
-      }
+      
+  
     }
     .pushable {
       // Smaller size for the menu button
@@ -309,8 +303,8 @@ body {
 .gameboard-wrapper {
   padding: 20px;
   position: relative;
-  
-    background-color: #f0f0f0;
+
+  background-color: #f0f0f0;
   border-radius: 10px;
   width: 520px; /* 6 columns * 80px each */
   height: 520px; /* 6 rows * 80px each */
@@ -402,12 +396,11 @@ body {
 
   // Hover effect
   &:hover {
-  
     transition: all 250ms cubic-bezier(0.3, 0.7, 0.4, 1.5);
     filter: brightness(110%);
-    transform: translateY(-5px); 
+    transform: translateY(-5px);
   }
-  
+
   // Active/Click effect
   &:active {
     background: linear-gradient(145deg, #b0d5ff 0%, #7cb9ff 100%);
@@ -455,7 +448,6 @@ body {
 
   &:hover {
     filter: brightness(110%);
- 
   }
 }
 //
@@ -492,6 +484,7 @@ body {
     animation: fadeIn 0.3s ease forwards;
 
     .modal-content {
+      width: auto;
       animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
       background: linear-gradient(145deg, #ffffff 0%, #f0f0f0 100%);
       padding: 30px;
@@ -501,35 +494,28 @@ body {
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
       transform: scale(0.7);
       opacity: 0;
-
     }
   }
 }
- 
-.credits-modal{
-  .modal-content{
+
+.credits-modal {
+  .modal-content {
     width: 50%;
-    div{
+    div {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    .social-links{
+    .social-links {
       display: flex;
       gap: 10px;
-      a{
-        color: #000;
-        font-size: 1.5em;
-        transition: all 0.3s ease;
-        &:hover{
-          color: #2ecc71;
-        }
-      }
+      text-align: start;
     }
   }
 }
 
-.copyright, .version{
+.copyright,
+.version {
   text-align: center;
   margin-top: 20px;
   font-size: 0.5em;
@@ -708,7 +694,6 @@ body {
   }
 }
 
-
 // timer css
 
 .game-info {
@@ -746,7 +731,6 @@ body {
     transform: scale(1);
   }
 }
- 
 
 .audio-message {
   position: fixed;
@@ -1019,47 +1003,45 @@ body {
   border-radius: 2px;
   pointer-events: none;
 }
- 
+
 .background-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.background-tile {
+  position: absolute;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.background-tile {
+  &.tile {
     z-index: -1;
-    overflow: hidden;
-    pointer-events: none;
-}
+    box-shadow: none; // Remove shadow for background tiles
+    pointer-events: none; // Prevent interaction
+  }
 
-.background-tile {
-    position: absolute;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
-}
-
-
-
-.background-tile {
-    &.tile {
-        z-index: -1;
-        box-shadow: none; // Remove shadow for background tiles
-        pointer-events: none; // Prevent interaction
-    }
-
-    &.arrow_up,
-    &.arrow_down,
-    &.arrow_left,
-    &.arrow_right,
-    &.block {
-        opacity: 0.3; // Make them semi-transparent
-        filter: brightness(0.8); // Slightly dim the background tiles
-    }
+  &.arrow_up,
+  &.arrow_down,
+  &.arrow_left,
+  &.arrow_right,
+  &.block {
+    opacity: 0.3; // Make them semi-transparent
+    filter: brightness(0.8); // Slightly dim the background tiles
+  }
 }
 
 // Loader
 
-.loading{
+.loading {
   font-style: italic;
 }
 
@@ -1085,6 +1067,4 @@ body {
   }
 }
 
- //
-
- 
+//
